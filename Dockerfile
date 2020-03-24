@@ -76,6 +76,4 @@ ENV PATH $PATH:$ANT_HOME/bin
 ENV PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 RUN npm install -g npm
-RUN npm install -g n
-RUN n stable
 RUN npm install -g sfdc-generate-package
