@@ -73,3 +73,9 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.
 ENV NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV ANT_HOME /usr/share/java/apache-ant
 ENV PATH $PATH:$ANT_HOME/bin
+ENV PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+RUN npm install -g npm
+RUN npm install -g n
+RUN n stable
+RUN npm install -g sfdc-generate-package
