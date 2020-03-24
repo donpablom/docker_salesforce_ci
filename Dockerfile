@@ -2,6 +2,7 @@ FROM ubuntu:18.04
 
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
+# Update apt-get set locales
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl ca-certificates locales \
     && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
@@ -9,7 +10,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VERSION jdk-12.0.2+10
-
+# Install Java jdk-12.0.2+10
 RUN set -eux; \
     ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
@@ -45,8 +46,7 @@ RUN set -eux; \
     tar -xf /tmp/openjdk.tar.gz --strip-components=1; \
     rm -rf /tmp/openjdk.tar.gz;
 
-ENV JAVA_HOME=/opt/java/openjdk \
-    PATH="/opt/java/openjdk/bin:$PATH"
+# Install git curl python3 etc..
 RUN apt-get update \
 	&& apt-get install -y \
 		build-essential \
@@ -58,11 +58,14 @@ RUN apt-get update \
 		python3 \
 	&& rm -rf /var/lib/apt/lists/*
 
-# Install nvm with node and npm
+# Set paths and 
 ENV NODE_VERSION=8.9.4 \
     NVM_DIR=/root/.nvm \
-    NVM_VERSION=0.33.8
-
+    NVM_VERSION=0.33.8 \
+	JAVA_HOME=/opt/java/openjdk \
+    PATH="/opt/java/openjdk/bin:$PATH"
+	
+# Install nvm with node and npm
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
@@ -77,3 +80,4 @@ ENV PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 RUN npm install -g npm
 RUN npm install -g sfdc-generate-package
+RUN npm install -g jsforce
