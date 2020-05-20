@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
-
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
-
+WORKDIR ~/
+USER root
 # Update apt-get set locales
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl ca-certificates locales \
@@ -56,6 +56,7 @@ RUN apt-get update \
         ant \
         unzip \
 		python3 \
+		wget \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Set paths and 
@@ -64,20 +65,20 @@ ENV NODE_VERSION=8.9.4 \
     NVM_VERSION=0.33.8 \
 	JAVA_HOME=/opt/java/openjdk \
     PATH="/opt/java/openjdk/bin:$PATH"
-	
+
 # Install nvm with node and npm
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default
-
 # Set node path
 ENV NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV ANT_HOME /usr/share/java/apache-ant
 ENV PATH $PATH:$ANT_HOME/bin
 ENV PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV PMD_VERSION 6.23.0
 
-RUN npm install -g npm
-RUN npm install -g sfdc-generate-package
-RUN npm install -g jsforce
+RUN npm install -g npm \
+	&& npm install -g sfdc-generate-package \
+	&& npm install -g jsforce 
