@@ -57,6 +57,7 @@ RUN apt-get update \
         unzip \
 		python3 \
 		wget \
+		bsdmainutils \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Set paths and 
